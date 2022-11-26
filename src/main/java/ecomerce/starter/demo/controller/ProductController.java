@@ -4,7 +4,7 @@ import java.util.*;
 
 import ecomerce.starter.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
 import ecomerce.starter.demo.model.Product;
@@ -42,11 +42,59 @@ public class ProductController {
     private ProductService productService;
 
     // Controller -> Service -> Repository
+    // Get
     @GetMapping(value = "/products")
     public List<Product> getProducts() {
         List<Product> products = new ArrayList<>();
         products = productService.getProducts();
         return products;
+    }
+
+    // Post (add product)
+    @PostMapping(value = "/products")
+    public Map<String,Object> addProduct(@RequestBody Product product) {
+        Map<String,Object> result = new HashMap<>();
+        String message = "";
+        Product productResponse = new Product();
+        try {
+            productResponse = productService.addProduct(product);
+            message = "Success";
+        } catch (Exception e) {
+            message = "There is an error in the service";
+        }
+        result.put("productData", productResponse);
+        result.put("message", message);
+
+        return result;
+    }
+
+
+    //Delete product
+    @DeleteMapping(value = "/products")
+    public String deleteProduct(@RequestParam String id){
+        String message = "";
+        try {
+            productService.deleteProduct(id);
+            message = "Success"; 
+        } catch (Exception e) {
+            message = "There is an error in the delete methods";
+        }
+
+        return message;
+    }
+
+    //Update product
+    @PutMapping(value = "/products")
+    public String updateProduct(@RequestBody Product product){
+        String message = "";
+        try {
+            productService.updateProduct(product);
+            message = "success";
+        } catch (Exception e) {
+            // TODO: handle exception
+            message = "There is an error in updateProduct controller";
+        }
+        return message;
     }
 
 }
