@@ -1,38 +1,45 @@
 package ecomerce.starter.demo.service;
 
+import ecomerce.starter.demo.dto.ProductDTO;
+import ecomerce.starter.demo.mapper.ProductMapper;
 import ecomerce.starter.demo.model.Product;
 import ecomerce.starter.demo.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
+
 
     //Get product
-    public List<Product> getProducts(){
-        List<Product> products = new ArrayList<>();
-        products = productRepository.findAll();
-       return products;
+    public List<ProductDTO> getProducts(){
+        return productMapper.productsToProductDTOs(productRepository.findAll());
     }
 
     //Add product
-    public Product addProduct(Product product){
-        return productRepository.save(product);
+    public ProductDTO addProduct(Product product){
+        return productMapper.productToProductDTO(productRepository.save(product));
     }
 
     //Delete
-    public void deleteProduct(String id){
-        productRepository.deleteById(Long.parseLong(id));
+    public String deleteProduct(String id){
+        try {
+            productRepository.deleteById(Long.parseLong(id));
+            return "Deleted Successfully";
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     //Update 
-    public void updateProduct(Product product){
-        productRepository.save(product);
+    public ProductDTO updateProduct(Product product){
+        return productMapper.productToProductDTO(productRepository.save(product));
     }
     
 }

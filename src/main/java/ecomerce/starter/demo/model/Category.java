@@ -14,7 +14,9 @@ public class Category {
     @Column(name = "id")
     private Long id;
     private String name;
-    private Long parentCategoryId;
+    @OneToOne
+    @JoinColumn(name = "parent_category_id")
+    private Category parentCategory;
     @ManyToMany
     @JoinTable(  name = "category_product",
             joinColumns = @JoinColumn(name = "category_id"),

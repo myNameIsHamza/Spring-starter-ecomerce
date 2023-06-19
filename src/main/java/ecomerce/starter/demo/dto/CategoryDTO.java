@@ -2,13 +2,15 @@ package ecomerce.starter.demo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class CategoryDTO {
     private Long id;
     private String name;
-    private Long parentCategoryId;
+    private CategoryDTO parentCategory;
 }

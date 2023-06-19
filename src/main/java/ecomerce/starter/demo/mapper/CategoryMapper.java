@@ -5,12 +5,17 @@ import ecomerce.starter.demo.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+import java.util.List;
+
+@Mapper(componentModel = "spring",uses = CategoryMapper.class)
 public interface CategoryMapper {
 
     CategoryMapper INSTANCE = Mappers.getMapper( CategoryMapper.class );
 
     CategoryDTO categoryToCategoryDTO(Category category);
+
+    List<CategoryDTO> categoriesToCategoriesDTO(List<Category> categories);
+
 
 }
 

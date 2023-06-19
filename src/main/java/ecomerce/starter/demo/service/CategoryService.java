@@ -1,8 +1,11 @@
 package ecomerce.starter.demo.service;
 
+import ecomerce.starter.demo.dto.CategoryDTO;
+import ecomerce.starter.demo.mapper.CategoryMapper;
 import ecomerce.starter.demo.model.Category;
 import ecomerce.starter.demo.model.Product;
 import ecomerce.starter.demo.repository.CategoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,27 +13,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
+
 
     //Get Category
-    public List<Category> getCategories(){
-        List<Category> categories = new ArrayList<>();
-        categories = categoryRepository.findAll();
-        return categories;
+    public List<CategoryDTO> getCategories(){
+        return categoryMapper.categoriesToCategoriesDTO(categoryRepository.findAll());
     }
 
     //Add
-    public Category addCategory(Category category) {return categoryRepository.save(category);}
+    public CategoryDTO addCategory(Category category) {return categoryMapper.categoryToCategoryDTO(categoryRepository.save(category));}
 
     //Delete
-    public void deleteCategory(String id){
-        categoryRepository.deleteById(Long.parseLong(id));
+    public String deleteCategory(String id){
+        try {
+            categoryRepository.deleteById(Long.parseLong(id));
+            return "Deleted Successfully";
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     //Update
-    public void updateCategory(Category category){categoryRepository.save(category);}
+    public CategoryDTO updateCategory(Category category){return categoryMapper.categoryToCategoryDTO(categoryRepository.save(category));}
 
 }
