@@ -3,6 +3,7 @@ package ecomerce.starter.demo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 
 
 @Entity
@@ -16,5 +17,8 @@ public class Product {
     private String detail;
     private String name;
     private double price;
+
+    @ManyToMany(mappedBy = "products")
+    List<Category> categories;
 
 }
